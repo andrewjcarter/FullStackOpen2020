@@ -1,62 +1,45 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
-const Header = (props) => {
-  return (
-    <h1>{props.course.name}</h1>
-  ) 
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max))
 }
 
-const Content = (props) => {
-  return (
-    <div>
-      { 
-        props.course.parts
-        .map(p => <Part key={p.name} partName={p.name} exerciseCount={p.exercises} />)
-      }
-    </div>
-  ) 
-}
-
-const Part = (props) => {
-  return (
-    <p>{props.partName} {props.exerciseCount}</p>
-  )
-}
-  
-const Total = (props) => {
-  const total = props.course.parts.reduce((acc, part) => acc + part.exercises, 0)
-  return (
-    <p>Number of exercises {total}</p>
-  ) 
-}
-
-const App = () => {
-  const course = {
-    name: 'Half Stack application development',
-    parts: [
-      {
-        name: 'Fundamentals of React',
-        exercises: 10
-      },
-      {
-        name: 'Using props to pass data',
-        exercises: 7
-      },
-      {
-        name: 'State of a component',
-        exercises: 14
-      },
-    ]
-  } 
+const App = ({ anecdotes }) => {
+  const [selected, setSelected] = useState(getRandomInt(anecdotes.length))
+  const [votes, setVotes] = useState(new Array(anecdotes.length).fill(0))
+  const getRandomAnecdote = (anecdotes) => {
+    return setSelected(getRandomInt(anecdotes.length))
+  }
+  const voteForAnecdote = (selection) => {
+    const updatedVotes = [...votes]
+    updatedVotes[selection] += 1
+    return setVotes(updatedVotes)
+  }
 
   return (
     <>
-      <Header course={course} />
-      <Content course={course} />
-      <Total course={course} />
+      <h2>Anecdote of the day</h2>
+      <div>{anecdotes[selected]}</div>
+      <div>has {votes[selected]} votes</div>
+      <div>
+        <button onClick={() => voteForAnecdote(selected)}>vote</button>
+        <button onClick={() => getRandomAnecdote(anecdotes)}>next anecdote</button>
+      </div>
+      <h2>Anecdote with the most Votes</h2>
+      <div>{anecdotes[votes.indexOf(Math.max(...votes))]}</div>
+      <div>has {Math.max(...votes)} votes</div>
     </>
   )
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+const anecdotes = [
+  'If it hurts, do it more often',
+  'Adding manpower to a late software project makes it later!',
+  'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+  'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+  'Premature optimization is the root of all evil.',
+  'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
+]
+
+ReactDOM.render(<App anecdotes={anecdotes} />, document.getElementById('root'))
