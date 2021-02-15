@@ -4,12 +4,13 @@ import Note from './components/Note'
 const App = (props) => {
   const [notes, setNotes] = useState(props.notes);
   const [newNote, setNewNote] = useState('');
+  const [showAll, setShowAll] = useState(true);
 
   const addNote = (event) => {
     event.preventDefault()
     // Create a new note to save
     const addedNote = {
-      id: notes.length + 1, 
+      id: notes.length + 1,
       content: newNote,
       date: new Date().toISOString(),
       important: Math.random() < 0.5,
@@ -20,6 +21,9 @@ const App = (props) => {
     setNewNote('');
   }
 
+  const notesToShow = showAll ? notes
+    : notes.filter(note => note.important)
+
   const handleNoteChange = (event) => {
     setNewNote(event.target.value)
   }
@@ -28,7 +32,7 @@ const App = (props) => {
     <div>
       <h1>Notes</h1>
       <ul>
-        {notes.map((note) => 
+        {notesToShow.map((note) =>
           <Note key={note.id} note={note} />
         )}
       </ul>
@@ -37,6 +41,9 @@ const App = (props) => {
         <input value={newNote} onChange={handleNoteChange}/>
         <button type='submit'>save</button>
       </form>
+      <button onClick={() => setShowAll(state => !state)}>
+        Show {showAll ? 'Important': 'All'}
+      </button>
     </div>
   )
 }
