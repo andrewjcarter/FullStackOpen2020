@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import ContactList from './components/ContactList'
 import ContactListForm from './components/ContactListForm'
+import ContactSearch from './components/ContactSearch'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -13,6 +14,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <ContactSearch persons={persons} />
       <ContactListForm persons={persons} setPersons={setPersons} />
       <ContactList persons={persons}/>
     </div>
