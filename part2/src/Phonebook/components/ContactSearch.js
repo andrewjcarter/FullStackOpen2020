@@ -10,8 +10,8 @@ const ContactSearch = ({ persons }) => {
     <div>
       <div>
         <label>
+          Search:
           <input value={searchName} 
-            placeholder='Search...' 
             onChange={handleSearch} />
         </label>
       </div>
